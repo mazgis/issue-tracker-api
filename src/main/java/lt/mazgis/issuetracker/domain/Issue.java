@@ -20,7 +20,7 @@ public class Issue {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private long issueId;
+  private Long issueId;
 
   @Transient protected IssueType issueType;
 
@@ -39,7 +39,7 @@ public class Issue {
     this.developer = developer;
   }
 
-  public long getIssueId() {
+  public Long getIssueId() {
     return this.issueId;
   }
 

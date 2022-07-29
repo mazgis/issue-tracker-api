@@ -8,50 +8,42 @@ import lt.mazgis.issuetracker.domain.Bug;
 import lt.mazgis.issuetracker.domain.Developer;
 import lt.mazgis.issuetracker.domain.Issue;
 import lt.mazgis.issuetracker.domain.Story;
-import lt.mazgis.issuetracker.repositories.BugRepository;
 import lt.mazgis.issuetracker.repositories.IssueRepository;
-import lt.mazgis.issuetracker.repositories.StoryRepository;
 
 @Component
 public class IssueService {
 
-  private final StoryRepository storyRepository;
-  private final BugRepository bugRepository;
   private final IssueRepository issueRepository;
 
-  public IssueService(
-      final StoryRepository storyRepository,
-      final BugRepository bugRepository,
-      final IssueRepository issueRepository) {
-    this.storyRepository = Objects.requireNonNull(storyRepository);
-    this.bugRepository = Objects.requireNonNull(bugRepository);
+  public IssueService(final IssueRepository issueRepository) {
     this.issueRepository = Objects.requireNonNull(issueRepository);
   }
 
   public List<Issue> listAllIssues() {
-    //    final List<Issue> issues = new ArrayList<>();
-    //    issues.addAll(this.storyRepository.findAll());
-    //    issues.addAll(this.bugRepository.findAll());
-    //    return issues;
     return this.issueRepository.findAll();
   }
 
   public Story addStory(final Story story) {
-    return this.storyRepository.saveAndFlush(story);
+    return this.issueRepository.saveAndFlush(story);
   }
 
   public Bug addBug(final Bug bug) {
-    return this.bugRepository.saveAndFlush(bug);
+    return this.issueRepository.saveAndFlush(bug);
   }
 
-  public Optional<Issue> assignDeveloper(final long issueId, final Developer developer) {
+  public Optional<Issue> assignDeveloperToStory(final long issueId, final Developer developer) {
     return this.issueRepository
         .findById(issueId)
-        .map(
-            i -> {
-              i.setDeveloper(developer);
-              return i;
-            })
+        .map(issue -> setDeveloper(developer, issue))
         .map(this.issueRepository::saveAndFlush);
+  }
+
+  private Issue setDeveloper(final Developer developer, final Issue i) {
+    i.setDeveloper(developer);
+    return i;
+  }
+
+  public void deleteIssue(final long issueId) {
+    this.issueRepository.deleteById(issueId);
   }
 }

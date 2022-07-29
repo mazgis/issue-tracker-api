@@ -29,7 +29,7 @@ public class DeveloperRestApiService {
   @GET
   @Produces(MediaType.APPLICATION_JSON)
   public List<Developer> listDeveloper() {
-    return this.developerService.listOfDevelopers();
+    return this.developerService.listAllDevelopers();
   }
 
   @POST

@@ -16,7 +16,7 @@ public class DeveloperService {
     this.developerRepository = Objects.requireNonNull(developerRepository);
   }
 
-  public List<Developer> listOfDevelopers() {
+  public List<Developer> listAllDevelopers() {
     return this.developerRepository.findAll();
   }
 
