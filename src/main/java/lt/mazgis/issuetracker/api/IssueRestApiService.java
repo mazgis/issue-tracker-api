@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import lt.mazgis.issuetracker.domain.Bug;
 import lt.mazgis.issuetracker.domain.Developer;
 import lt.mazgis.issuetracker.domain.Issue;
+import lt.mazgis.issuetracker.domain.IssueType;
 import lt.mazgis.issuetracker.domain.Story;
 import lt.mazgis.issuetracker.services.DeveloperService;
 import lt.mazgis.issuetracker.services.IssueService;
@@ -40,13 +41,35 @@ public class IssueRestApiService {
     return this.issueService.listAllIssues();
   }
 
+  @GET
+  @Path("/story/{storyId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Story getStory(@PathParam("storyId") final long stroyId) {
+    return this.issueService
+        .getIssueById(stroyId)
+        .filter(issue -> IssueType.STORY == issue.getIssueType())
+        .map(Story.class::cast)
+        .orElseThrow(() -> new NotFoundException("Story by given id not found"));
+  }
+
   @POST
   @Path("/story")
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public Story addStory(final Story story) {
     validateAddRequest(story);
-    return this.issueService.addStory(story);
+    return (Story) this.issueService.addIssue(story);
+  }
+
+  @GET
+  @Path("/bug/{bugId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  public Bug getBug(@PathParam("bugId") final long bugId) {
+    return this.issueService
+        .getIssueById(bugId)
+        .filter(issue -> IssueType.BUG == issue.getIssueType())
+        .map(Bug.class::cast)
+        .orElseThrow(() -> new NotFoundException("Bug by given id not found"));
   }
 
   @POST
@@ -55,7 +78,7 @@ public class IssueRestApiService {
   @Consumes(MediaType.APPLICATION_JSON)
   public Bug addBug(final Bug bug) {
     validateAddRequest(bug);
-    return this.issueService.addBug(bug);
+    return (Bug) this.issueService.addIssue(bug);
   }
 
   @DELETE
@@ -65,7 +88,7 @@ public class IssueRestApiService {
   }
 
   @PUT
-  @Path("/{issueId}/{developerId}")
+  @Path("{issueId}/{developerId}")
   @Produces(MediaType.APPLICATION_JSON)
   public Issue assingDeveloper(
       @PathParam("issueId") final long issueId, @PathParam("developerId") final long developerId) {

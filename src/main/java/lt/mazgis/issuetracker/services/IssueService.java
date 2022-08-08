@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
-import lt.mazgis.issuetracker.domain.Bug;
 import lt.mazgis.issuetracker.domain.Developer;
 import lt.mazgis.issuetracker.domain.Issue;
-import lt.mazgis.issuetracker.domain.Story;
 import lt.mazgis.issuetracker.repositories.IssueRepository;
 
 @Component
@@ -23,12 +21,12 @@ public class IssueService {
     return this.issueRepository.findAll();
   }
 
-  public Story addStory(final Story story) {
-    return this.issueRepository.saveAndFlush(story);
+  public Optional<Issue> getIssueById(final long issueId) {
+    return this.issueRepository.findById(issueId);
   }
 
-  public Bug addBug(final Bug bug) {
-    return this.issueRepository.saveAndFlush(bug);
+  public Issue addIssue(final Issue issue) {
+    return this.issueRepository.saveAndFlush(issue);
   }
 
   public Optional<Issue> assignDeveloperToStory(final long issueId, final Developer developer) {
