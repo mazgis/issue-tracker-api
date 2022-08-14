@@ -28,7 +28,7 @@ public class DeveloperRestApiService {
 
   @GET
   @Produces(MediaType.APPLICATION_JSON)
-  public List<Developer> listDeveloper() {
+  public List<Developer> listDevelopers() {
     return this.developerService.listAllDevelopers();
   }
 
