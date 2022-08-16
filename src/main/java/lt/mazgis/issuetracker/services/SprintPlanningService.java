@@ -21,14 +21,14 @@ public class SprintPlanningService {
 
   private final IssueRepository issueRepository;
 
-  private final int maxStoryPointsPerDevelperForSprint;
+  private final int maxStoryPointsPerDeveloperForSprint;
 
   public SprintPlanningService(
       final IssueRepository issueRepository,
       @Value("${sprint.srory.points.per.developer.max:10}")
-          final int maxStoryPointsPerDevelperForSprint) {
+          final int maxStoryPointsPerDeveloperForSprint) {
     this.issueRepository = Objects.requireNonNull(issueRepository);
-    this.maxStoryPointsPerDevelperForSprint = maxStoryPointsPerDevelperForSprint;
+    this.maxStoryPointsPerDeveloperForSprint = maxStoryPointsPerDeveloperForSprint;
   }
 
   public List<Sprint> plan(final int numberOfDevelopers) {
@@ -38,7 +38,7 @@ public class SprintPlanningService {
     Collections.sort(stories, REVERSE_ORDER_BY_STORY_POINTS);
 
     final int numberOfStoryPointsPerSprint =
-        numberOfDevelopers * this.maxStoryPointsPerDevelperForSprint;
+        numberOfDevelopers * this.maxStoryPointsPerDeveloperForSprint;
 
     final List<Sprint> sprints = new ArrayList<>();
 
