@@ -25,7 +25,7 @@ public class IssueService {
     return this.issueRepository.findById(issueId);
   }
 
-  public Issue addIssue(final Issue issue) {
+  public <T extends Issue> T saveOrUpdateIssue(final T issue) {
     return this.issueRepository.saveAndFlush(issue);
   }
 
@@ -36,9 +36,9 @@ public class IssueService {
         .map(this.issueRepository::saveAndFlush);
   }
 
-  private Issue setDeveloper(final Developer developer, final Issue i) {
-    i.setDeveloper(developer);
-    return i;
+  private <T extends Issue> T setDeveloper(final Developer developer, final T issues) {
+    issues.setDeveloper(developer);
+    return issues;
   }
 
   public void deleteIssue(final long issueId) {

@@ -57,8 +57,23 @@ public class IssueRestApiService {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public Story addStory(final Story story) {
-    validateAddRequest(story);
-    return (Story) this.issueService.addIssue(story);
+    validateAddRequestHasNoId(story);
+    return this.issueService.saveOrUpdateIssue(story);
+  }
+
+  @PUT
+  @Path("/story/{storyId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Story updateStory(@PathParam("storyId") final long stroyId, final Story newStoryValues) {
+    validateAddRequestHasNoId(newStoryValues);
+    return this.issueService
+        .getIssueById(stroyId)
+        .filter(issue -> IssueType.STORY == issue.getIssueType())
+        .map(Story.class::cast)
+        .map(story -> story.merge(newStoryValues))
+        .map(this.issueService::saveOrUpdateIssue)
+        .orElseThrow(() -> new NotFoundException("Story by given id not found"));
   }
 
   @GET
@@ -77,8 +92,23 @@ public class IssueRestApiService {
   @Produces(MediaType.APPLICATION_JSON)
   @Consumes(MediaType.APPLICATION_JSON)
   public Bug addBug(final Bug bug) {
-    validateAddRequest(bug);
-    return (Bug) this.issueService.addIssue(bug);
+    validateAddRequestHasNoId(bug);
+    return this.issueService.saveOrUpdateIssue(bug);
+  }
+
+  @PUT
+  @Path("/bug/{bugId}")
+  @Produces(MediaType.APPLICATION_JSON)
+  @Consumes(MediaType.APPLICATION_JSON)
+  public Bug updateBug(@PathParam("bugId") final long bugId, final Bug newBugValues) {
+    validateAddRequestHasNoId(newBugValues);
+    return this.issueService
+        .getIssueById(bugId)
+        .filter(issue -> IssueType.BUG == issue.getIssueType())
+        .map(Bug.class::cast)
+        .map(bug -> bug.merge(newBugValues))
+        .map(this.issueService::saveOrUpdateIssue)
+        .orElseThrow(() -> new NotFoundException("Bug by given id not found"));
   }
 
   @DELETE
@@ -101,7 +131,7 @@ public class IssueRestApiService {
         .orElseThrow(() -> new NotFoundException("Issue not found"));
   }
 
-  private void validateAddRequest(final Issue issue) {
+  private void validateAddRequestHasNoId(final Issue issue) {
     if (issue.getIssueId() != null) {
       throw new BadRequestException(
           "Request should not contains issueId. To update exising issue user other method.");

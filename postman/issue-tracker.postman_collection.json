@@ -1,0 +1,563 @@
+{
+	"info": {
+		"_postman_id": "946a7e7d-9431-4aa6-b7c9-c981367ce74e",
+		"name": "issue-tracker",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "3364043"
+	},
+	"item": [
+		{
+			"name": "Developer",
+			"item": [
+				{
+					"name": "List Developers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/issue-tracker/developer",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"issue-tracker",
+								"developer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Developer",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var newDeveloper = pm.response.json();",
+									"pm.collectionVariables.set(\"lastDeveloperId\", newDeveloper.id);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{$randomUserName}}"
+						},
+						"url": {
+							"raw": "{{base_path}}/developer",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"developer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Developer",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{{$randomUserName}}"
+						},
+						"url": {
+							"raw": "{{base_path}}/developer/1",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"developer",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Developer",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/developer/:developerId",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"developer",
+								":developerId"
+							],
+							"variable": [
+								{
+									"key": "developerId",
+									"value": "{{lastDeveloperId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Issues",
+			"item": [
+				{
+					"name": "Story",
+					"item": [
+						{
+							"name": "Create Story",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"random_number\", _.random(1, 10))"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var newStory = pm.response.json();",
+											"pm.collectionVariables.set(\"lastStoryId\", newStory.issueId);",
+											"pm.collectionVariables.set(\"lastStoryTitle\", newStory.title);",
+											"pm.collectionVariables.set(\"lastStoryDescription\", newStory.description);",
+											"pm.collectionVariables.set(\"lastStoryStoryPoints\", newStory.storyPoints);",
+											"pm.collectionVariables.set(\"lastStoryStatus\", newStory.staus);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\":\"Stroy {{$randomProductAdjective}} \",\n\t\"description\":\"{{$randomPhrase}}\",\n    \"status\":\"ESTIMATED\",\n    \"storyPoints\":\"{{random_number}}\"\n    \n}"
+								},
+								"url": {
+									"raw": "{{base_path}}/issue/story",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"story"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Story",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var lastStory = pm.response.json();",
+											"pm.collectionVariables.set(\"lastStoryId\", lastStory.issueId);",
+											"pm.collectionVariables.set(\"lastStoryTitle\", lastStory.title);",
+											"pm.collectionVariables.set(\"lastStoryDescription\", lastStory.description);",
+											"pm.collectionVariables.set(\"lastStoryStoryPoints\", lastStory.storyPoints);",
+											"pm.collectionVariables.set(\"lastStoryStatus\", lastStory.status);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_path}}/issue/story/:storyId",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"story",
+										":storyId"
+									],
+									"variable": [
+										{
+											"key": "storyId",
+											"value": "{{lastStoryId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Story",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.environment.set(\"random_number\", _.random(1, 10))"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"{{lastStoryTitle}}\",\n    \"description\": \"{{lastStoryDescription}}\",\n    \"storyPoints\": \"{{lastStoryStoryPoints}}\",\n    \"status\": \"COMPLETED\"\n}"
+								},
+								"url": {
+									"raw": "{{base_path}}/issue/story/:storyId",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"story",
+										":storyId"
+									],
+									"variable": [
+										{
+											"key": "storyId",
+											"value": "{{lastStoryId}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Bug",
+					"item": [
+						{
+							"name": "Create Bug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var newBug = pm.response.json();",
+											"pm.collectionVariables.set(\"lastBugId\", newBug.issueId);",
+											"pm.collectionVariables.set(\"lastBugTitle\", newBug.title);",
+											"pm.collectionVariables.set(\"lastBugDescription\", newBug.description);",
+											"pm.collectionVariables.set(\"lastBugStatus\", newBug.status);",
+											"pm.collectionVariables.set(\"lastBugPriority\", newBug.priority);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\":\"Bug {{$randomProductAdjective}} \",\n\t\"description\":\"{{$randomPhrase}}\",\n    \"priority\":\"MAJOR\",\n    \"status\":\"VERIFYED\"\n}"
+								},
+								"url": {
+									"raw": "{{base_path}}/issue/bug",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"bug"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Bug",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var lastBug = pm.response.json();",
+											"pm.collectionVariables.set(\"lastBugId\", lastBug.issueId);",
+											"pm.collectionVariables.set(\"lastBugTitle\", lastBug.title);",
+											"pm.collectionVariables.set(\"lastBugDescription\", lastBug.description);",
+											"pm.collectionVariables.set(\"lastBugStatus\", lastBug.status);",
+											"pm.collectionVariables.set(\"lastBugPriority\", lastBug.priority);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_path}}/issue/bug/:bugId",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"bug",
+										":bugId"
+									],
+									"variable": [
+										{
+											"key": "bugId",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Bug",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\"title\": \"Bug Refined \",\n    \"description\": \"Try to index the XML application, maybe it will hack the digital system!\",\n    \"priority\": \"MAJOR\",\n    \"status\": \"VRIFYED\"\n}"
+								},
+								"url": {
+									"raw": "{{base_path}}/issue/bug/:bugId",
+									"host": [
+										"{{base_path}}"
+									],
+									"path": [
+										"issue",
+										"bug",
+										":bugId"
+									],
+									"query": [
+										{
+											"key": "bugId",
+											"value": "2",
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "bugId",
+											"value": "2"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "List Issues",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/issue",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"issue"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Assing Developer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"Stroy 1\",\n\t\"description\":\"descibe story 1\"\n}"
+						},
+						"url": {
+							"raw": "{{base_path}}/issue/:issueId/:developerId",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"issue",
+								":issueId",
+								":developerId"
+							],
+							"variable": [
+								{
+									"key": "issueId",
+									"value": "2"
+								},
+								{
+									"key": "developerId",
+									"value": "{{lastDeveloperId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Issue",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"title\":\"Stroy 1\",\n\t\"description\":\"descibe story 1\"\n}"
+						},
+						"url": {
+							"raw": "{{base_path}}/issue/:issueId",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"issue",
+								":issueId"
+							],
+							"variable": [
+								{
+									"key": "issueId",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sprint Plan",
+			"item": [
+				{
+					"name": "plan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_path}}/plan?numberOfDevelopers=2",
+							"host": [
+								"{{base_path}}"
+							],
+							"path": [
+								"plan"
+							],
+							"query": [
+								{
+									"key": "numberOfDevelopers",
+									"value": "2"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "base_path",
+			"value": "http://localhost:8080/issue-tracker"
+		},
+		{
+			"key": "lastStory",
+			"value": ""
+		},
+		{
+			"key": "lastStoryId",
+			"value": ""
+		},
+		{
+			"key": "lastStoryTitle",
+			"value": ""
+		},
+		{
+			"key": "lastStoryDescription",
+			"value": ""
+		},
+		{
+			"key": "lastStoryStoryPoints",
+			"value": ""
+		},
+		{
+			"key": "lastStoryStatus",
+			"value": ""
+		},
+		{
+			"key": "lastBugId",
+			"value": ""
+		},
+		{
+			"key": "lastBugTitle",
+			"value": ""
+		},
+		{
+			"key": "lastBugDescription",
+			"value": ""
+		},
+		{
+			"key": "lastBugStatus",
+			"value": ""
+		},
+		{
+			"key": "lastBugPriority",
+			"value": ""
+		},
+		{
+			"key": "lastDeveloperId",
+			"value": ""
+		}
+	]
+}

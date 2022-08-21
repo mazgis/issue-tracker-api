@@ -21,7 +21,7 @@ public class Sprint {
   }
 
   public int getTotalStoryPoints() {
-    return this.stories.stream().map(Story::getStoryPoints).reduce(0, Integer::sum);
+    return this.totalStoryPoints;
   }
 
   public int getIndex() {

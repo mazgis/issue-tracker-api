@@ -78,4 +78,9 @@ public class Issue {
   public void setTitle(final String title) {
     this.title = title;
   }
+
+  protected void merge(final Issue issue) {
+    this.description = issue.description;
+    this.title = issue.title;
+  }
 }

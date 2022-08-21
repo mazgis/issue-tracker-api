@@ -37,4 +37,11 @@ public class Story extends Issue {
   public void setStoryPoints(final int storyPoints) {
     this.storyPoints = storyPoints;
   }
+
+  public Story merge(final Story issue) {
+    super.merge(issue);
+    this.status = issue.status;
+    this.storyPoints = issue.storyPoints;
+    return this;
+  }
 }

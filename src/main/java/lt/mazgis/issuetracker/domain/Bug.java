@@ -33,4 +33,11 @@ public class Bug extends Issue {
   public void setStatus(final BugStatus status) {
     this.status = status;
   }
+
+  public Bug merge(final Bug bug) {
+    super.merge(bug);
+    this.priority = bug.priority;
+    this.status = bug.status;
+    return this;
+  }
 }

@@ -80,7 +80,7 @@ class IssueServiceTest {
 
     when(this.issueRepository.saveAndFlush(any())).thenReturn(mockedResult);
 
-    final Issue result = this.issueService.addIssue(mockedRequest);
+    final Issue result = this.issueService.saveOrUpdateIssue(mockedRequest);
 
     verify(this.issueRepository).saveAndFlush(mockedRequest);
 
