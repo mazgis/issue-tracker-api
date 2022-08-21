@@ -110,7 +110,9 @@ Algorithm isn't prefect as in some cases it provides sprints with stories point 
 #### Missing parts
 
 As was lack of (free) time for coding, I didn't manage to write JUnit Test to cover all functionality. But at the same time, there good portion of JUnit Test to evaluate my coding style.
+
 For the same reason, there is lack of input validation, which can cause errors like : max story point for developer.
+
 And finally it was my first application with RestEasy and I didn't analyze how to provide meaningful messages in response (after I found out that exception message is not provided in response). I need to read reference manual to solve and issue.     
 
 
